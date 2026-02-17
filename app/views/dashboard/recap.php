@@ -24,7 +24,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<!-- Cartes de statistiques -->
+
 <div class="row" id="statsContainer">
     <!-- Besoins -->
     <div class="col-xl-3 col-md-6 mb-4">
@@ -117,25 +117,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<!-- Barre de progression globale -->
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Progression globale</h5>
-                <div class="progress" style="height: 30px;">
-                    <div class="progress-bar bg-success" role="progressbar" 
-                         style="width: <?= $stats['pourcentage_satisfait'] ?>%;" 
-                         aria-valuenow="<?= $stats['pourcentage_satisfait'] ?>" 
-                         aria-valuemin="0" 
-                         aria-valuemax="100">
-                        <?= $stats['pourcentage_satisfait'] ?>% satisfait
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <!-- Tableau des achats par ville -->
 <div class="row">
@@ -170,7 +152,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<!-- Script AJAX pour actualisation -->
+
 <script>
 function refreshStats() {
     $('#statsContainer').append('<div class="col-12 text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>');
@@ -181,10 +163,10 @@ function refreshStats() {
         dataType: 'json',
         success: function(response) {
             if (response.success) {
-                // Mettre à jour le timestamp
+                
                 $('#timestamp').text(response.timestamp);
                 
-                // Reconstruire les cartes
+                
                 var stats = response.stats;
                 var html = `
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -277,7 +259,7 @@ function refreshStats() {
                 
                 $('#statsContainer').html(html);
                 
-                // Mettre à jour le tableau des villes
+                
                 var tableHtml = '';
                 response.achatsParVille.forEach(function(ville) {
                     tableHtml += `
