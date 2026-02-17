@@ -10,7 +10,7 @@ require_once __DIR__ . '/../layouts/header.php';
 ?>
 
     <div class="main-content">
-        <!-- HEADER (identique) -->
+       
         <div class="header-area">
             <div class="row align-items-center">
                 <div class="col-md-6">
@@ -26,7 +26,7 @@ require_once __DIR__ . '/../layouts/header.php';
             </div>
         </div>
 
-        <!-- TITRE -->
+        
         <div class="page-title-area">
             <div class="row align-items-center">
                 <div class="col-sm-6">
@@ -98,11 +98,10 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <script>
 $(document).ready(function() {
-    // Mettre à jour le max de la quantité en fonction du don sélectionné
+    
     $('#don_id').change(function() {
         var selected = $(this).find('option:selected');
-        // Cette fonctionnalité nécessiterait de stocker les quantités disponibles
-        // Pour l'instant, on garde la validation côté serveur
+        
     });
 });
 </script>
