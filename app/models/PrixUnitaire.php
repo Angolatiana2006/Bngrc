@@ -72,11 +72,11 @@ class PrixUnitaire
     {
         $db = Db::getInstance();
 
-        // Vérifier si le prix existe déjà
+        
         $existant = self::getByBesoinTypeId($besoin_type_id);
         
         if ($existant) {
-            // Mise à jour
+            
             $db->runQuery(
                 "UPDATE prix_unitaires SET 
                     prix_unitaire = ?,
@@ -85,7 +85,7 @@ class PrixUnitaire
                 [$prix_unitaire, $besoin_type_id]
             );
         } else {
-            // Insertion
+            
             $db->runQuery(
                 "INSERT INTO prix_unitaires (besoin_type_id, prix_unitaire)
                  VALUES (?, ?)",
