@@ -13,7 +13,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
         <div class="main-content-inner">
 
-            <!-- AFFICHAGE DES ERREURS -->
+            
             <?php if (!empty($errors)): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>Erreur(s) :</strong>
@@ -28,7 +28,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 </div>
             <?php endif; ?>
 
-            <!-- FORMULAIRE D'AJOUT DE DON -->
+           
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title">Nouveau don</h4>
@@ -40,7 +40,7 @@ require_once __DIR__ . '/../layouts/header.php';
                     
                     <form method="POST" action="/dons/create" class="mt-4">
                         
-                        <!-- Option 1: Type existant -->
+                        
                         <div class="form-group">
                             <label for="besoin_type_id">Type de don existant</label>
                             <select class="form-control" id="besoin_type_id" name="besoin_type_id">
@@ -56,7 +56,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         
                         <hr class="my-4">
                         
-                        <!-- Option 2: Nouveau type -->
+                        
                         <h5 class="text-success">Ou créez un nouveau type :</h5>
                         
                         <div class="form-group">
@@ -80,7 +80,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         
                         <hr class="my-4">
                         
-                        <!-- Quantité -->
+                        
                         <div class="form-group">
                             <label for="quantite">Quantité <span class="text-danger">*</span></label>
                             <input type="number" step="0.01" min="0.01" class="form-control" id="quantite" name="quantite" 
