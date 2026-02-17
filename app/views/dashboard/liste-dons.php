@@ -10,7 +10,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <div class="main-content-inner">
 
-    
+    <!-- MESSAGES DE SUCCÈS -->
     <?php if(isset($_GET['success']) && $_GET['success'] == 1): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>Succès !</strong> Le don a été ajouté avec succès.
@@ -19,8 +19,27 @@ require_once __DIR__ . '/../layouts/header.php';
             </button>
         </div>
     <?php endif; ?>
+
+    <!-- MESSAGES D'ERREUR DE VENTE -->
+    <?php if(isset($_GET['vente_error']) && $_GET['vente_error'] == 1): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>❌ Erreur de vente !</strong>
+            <ul class="mb-0 mt-2">
+                <?php 
+                $errors = $_SESSION['vente_errors'] ?? [];
+                foreach ($errors as $error): 
+                ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+                <?php unset($_SESSION['vente_errors']); ?>
+            </ul>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endif; ?>
     
-    
+    <!-- BOUTONS D'AJOUT -->
     <div class="row mb-4">
         <div class="col-12">
             <a href="/dons/create" class="btn btn-primary">
@@ -32,7 +51,7 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 
-    
+    <!-- TABLEAU DES DONS -->
     <div class="card">
         <div class="card-body">
             <h4 class="header-title">Stock BNGRC - Tous les dons</h4>
@@ -56,16 +75,13 @@ require_once __DIR__ . '/../layouts/header.php';
                         <?php if(!empty($dons)): ?>
                             <?php foreach($dons as $don): ?>
                                 <?php 
-                                    
                                     $quantite_attribuee = $don['quantite_attribuee'] ?? 0;
                                     $montant_achats = $don['montant_utilise_achats'] ?? 0;
-                                    
                                     
                                     if ($don['type'] === 'argent') {
                                         $disponible = $don['quantite'] - $montant_achats;
                                         $unite = 'AR';
                                     } else {
-                                        
                                         $disponible = $don['quantite'] - $quantite_attribuee;
                                         $unite = '';
                                     }
@@ -107,15 +123,15 @@ require_once __DIR__ . '/../layouts/header.php';
                                         <?php endif; ?>
                                     </td>
                                     <td class="text-center">
-                                        <a href="/dons/edit/<?= $don['id'] ?>" class="btn btn-sm btn-warning" title="Modifier">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                        <a href="/dons/delete/<?= $don['id'] ?>" 
-                                           class="btn btn-sm btn-danger" 
-                                           title="Supprimer"
-                                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce don ?')">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
+                                        <?php if($disponible > 0 && $don['type'] !== 'argent'): ?>
+                                            <a href="/ventes/vendre/<?= $don['id'] ?>" class="btn btn-sm btn-success" title="Vendre">
+                                                <i class="fa fa-usd"></i> Vendre
+                                            </a>
+                                        <?php elseif($don['type'] === 'argent'): ?>
+                                            <span class="badge badge-secondary">Dons en argent</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-secondary">Stock épuisé</span>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -68,6 +68,7 @@ class PrixUnitaire
         );
     }
 
+
     public static function updateByBesoinTypeId(int $besoin_type_id, float $prix_unitaire): void
     {
         $db = Db::getInstance();
@@ -81,14 +82,14 @@ class PrixUnitaire
                 "UPDATE prix_unitaires SET 
                     prix_unitaire = ?,
                     date_mise_a_jour = NOW()
-                 WHERE besoin_type_id = ?",
+                WHERE besoin_type_id = ?",
                 [$prix_unitaire, $besoin_type_id]
             );
         } else {
-            
+        
             $db->runQuery(
                 "INSERT INTO prix_unitaires (besoin_type_id, prix_unitaire)
-                 VALUES (?, ?)",
+                VALUES (?, ?)",
                 [$besoin_type_id, $prix_unitaire]
             );
         }

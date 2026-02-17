@@ -48,6 +48,72 @@ require_once __DIR__ . '/../layouts/header.php';
 
 
 
+<div class="row mb-4">
+    <div class="col-12 text-right">
+        
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#resetModal">
+            <i class="fa fa-refresh"></i> Réinitialiser toutes les actions
+        </button>
+    </div>
+</div>
+
+
+<div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="resetModalLabel">
+                    <i class="fa fa-exclamation-triangle"></i> Confirmation de réinitialisation
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/reset/reset">
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <strong>Attention !</strong> Cette action est irréversible.
+                    </div>
+                    <p>Vous êtes sur le point de :</p>
+                    <ul>
+                        <li>Supprimer toutes les attributions de dons</li>
+                        <li>Supprimer tous les achats effectués</li>
+                        <li>Réinitialiser les quantités de dons</li>
+                        <li>Remettre à zéro les colonnes "Déjà attribué" et "Achats effectués"</li>
+                    </ul>
+                    <p class="mb-0">Les besoins et les types de dons seront conservés.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-check"></i> Oui, je confirme
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<?php if(isset($_GET['reset_success']) && $_GET['reset_success'] == 1): ?>
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <strong>Succès !</strong> <?= $_SESSION['reset_success'] ?? 'Toutes les actions ont été réinitialisées' ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <?php unset($_SESSION['reset_success']); ?>
+<?php endif; ?>
+
+<?php if(isset($_GET['reset_error']) && $_GET['reset_error'] == 1): ?>
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <strong> Erreur !</strong> <?= $_SESSION['reset_error'] ?? 'Erreur lors de la réinitialisation' ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <?php unset($_SESSION['reset_error']); ?>
+<?php endif; ?>
 
 <div class="card mb-4">
     <div class="card-body">

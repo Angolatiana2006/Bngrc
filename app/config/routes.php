@@ -6,6 +6,8 @@ use app\controllers\BesoinController;
 use app\controllers\DonController;
 use app\controllers\AttributionController;
 use app\controllers\AchatController;
+use app\controllers\ResetController;
+use app\controllers\VenteController;
 
 use app\middlewares\SecurityHeadersMiddleware;
 use flight\Engine;
@@ -74,5 +76,13 @@ $router->post('/achats/create', [AchatController::class, 'create']);
 $router->get('/achats/ville/@ville_id:[0-9]+', [AchatController::class, 'filterByVille']);
 $router->get('/achats/recap', [AchatController::class, 'recap']);
 $router->get('/achats/recap-ajax', [AchatController::class, 'recapAjax']);
+
+
+$router->post('/reset/reset', [ResetController::class, 'reset']);
+
+
+$router->get('/ventes', [VenteController::class, 'index']);
+$router->get('/ventes/vendre/@id:[0-9]+', [VenteController::class, 'showVenteForm']);
+$router->post('/ventes/vendre', [VenteController::class, 'vendre']);
 
 },[]);

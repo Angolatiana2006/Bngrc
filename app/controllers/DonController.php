@@ -30,81 +30,92 @@ class DonController
     }
 
   
-public function create()
-{
-    
-    $besoin_type_id = $_POST['besoin_type_id'] ?? null;
-    $nom_besoin = $_POST['nom_besoin'] ?? '';
-    $type_categorie = $_POST['type_categorie'] ?? null;
-    $quantite = $_POST['quantite'] ?? null;
 
-    
-    $errors = [];
-    
-    
-    if (!$besoin_type_id && (empty($nom_besoin) || !$type_categorie)) {
-        $errors[] = "Veuillez soit sélectionner un type existant, soit remplir les champs pour un nouveau type (catégorie et nom)";
-    }
-    
-    if (!$quantite || $quantite <= 0) {
-        $errors[] = "Veuillez saisir une quantité valide (supérieure à 0)";
-    }
-
-    
-    if (!empty($errors)) {
-        $typesBesoins = BesoinType::getAll();
+    public function create()
+    {
         
-        Flight::render('dashboard/ajout-don', [
-            'typesBesoins' => $typesBesoins,
-            'errors' => $errors,
-            'old' => $_POST
-        ]);
-        return;
-    }
-
-    
-    if ($besoin_type_id) {
-        
-        $final_besoin_type_id = $besoin_type_id;
-    } else {
-        
-        $besoinType = BesoinType::getByNameAndType($nom_besoin, $type_categorie);
-        
-        if (!$besoinType) {
-            
-            $typeData = [
-                'type' => $type_categorie,
-                'name' => $nom_besoin
-            ];
-            BesoinType::insert($typeData);
-            
-            
-            $besoinType = BesoinType::getByNameAndType($nom_besoin, $type_categorie);
-            $final_besoin_type_id = $besoinType['id'];
-        } else {
-            $final_besoin_type_id = $besoinType['id'];
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
         }
-    }
 
-    
-    $donExistant = Don::getByBesoinTypeId($final_besoin_type_id);
-    
-    if ($donExistant) {
-       
-        $nouvelleQuantite = $donExistant['quantite'] + $quantite;
-        Don::update($donExistant['id'], ['quantite' => $nouvelleQuantite]);
-    } else {
+        $besoin_type_id = $_POST['besoin_type_id'] ?? null;
+        $nom_besoin = $_POST['nom_besoin'] ?? '';
+        $type_categorie = $_POST['type_categorie'] ?? null;
+        $quantite = $_POST['quantite'] ?? null;
+        $prix_unitaire = $_POST['prix_unitaire'] ?? null;
+
+        $errors = [];
         
-        $data = [
-            'besoin_type_id' => $final_besoin_type_id,
-            'quantite' => $quantite
-        ];
-        Don::insert($data);
-    }
+        
+        if (!$besoin_type_id && (empty($nom_besoin) || !$type_categorie)) {
+            $errors[] = "Veuillez soit sélectionner un type existant, soit remplir les champs pour un nouveau type (catégorie, nom et prix)";
+        }
+        
+        if (!$quantite || $quantite <= 0) {
+            $errors[] = "Veuillez saisir une quantité valide (supérieure à 0)";
+        }
 
     
-    Flight::redirect('/dons?success=1');
-}
+        if (!$besoin_type_id && !empty($nom_besoin) && $type_categorie) {
+            if (!$prix_unitaire || $prix_unitaire <= 0) {
+                $errors[] = "Veuillez saisir un prix unitaire valide pour le nouveau type de don";
+            }
+        }
+
+        if (!empty($errors)) {
+            $typesBesoins = BesoinType::getAll();
+            
+            Flight::render('dashboard/ajout-don', [
+                'typesBesoins' => $typesBesoins,
+                'errors' => $errors,
+                'old' => $_POST
+            ]);
+            return;
+        }
+
+        
+        if ($besoin_type_id) {
+            $final_besoin_type_id = $besoin_type_id;
+        } else {
+        
+            $besoinType = BesoinType::getByNameAndType($nom_besoin, $type_categorie);
+            
+            if (!$besoinType) {
+            
+                $typeData = [
+                    'type' => $type_categorie,
+                    'name' => $nom_besoin
+                ];
+                BesoinType::insert($typeData);
+            
+                $besoinType = BesoinType::getByNameAndType($nom_besoin, $type_categorie);
+                $final_besoin_type_id = $besoinType['id'];
+
+            
+                if ($prix_unitaire && class_exists('app\models\PrixUnitaire')) {
+                    \app\models\PrixUnitaire::updateByBesoinTypeId($final_besoin_type_id, $prix_unitaire);
+                }
+            } else {
+                $final_besoin_type_id = $besoinType['id'];
+            }
+        }
+
+    
+        $donExistant = Don::getByBesoinTypeId($final_besoin_type_id);
+        
+        if ($donExistant) {
+            $nouvelleQuantite = $donExistant['quantite'] + $quantite;
+            Don::update($donExistant['id'], ['quantite' => $nouvelleQuantite]);
+        } else {
+            $data = [
+                'besoin_type_id' => $final_besoin_type_id,
+                'quantite' => $quantite
+            ];
+            Don::insert($data);
+        }
+
+        Flight::redirect('/dons?success=1');
+    }
     
     
     public function showEditForm($id)

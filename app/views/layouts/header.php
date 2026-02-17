@@ -55,6 +55,9 @@
                         <li class="<?= ($activeMenu == 'recap') ? 'active' : '' ?>">
                             <a href="/achats/recap"><i class="fa fa-pie-chart"></i><span>Récapitulatif</span></a>
                         </li>
+                        <li class="<?= ($activeMenu == 'ventes') ? 'active' : '' ?>">
+                            <a href="/ventes"><i class="fa fa-usd"></i><span>Ventes</span></a>
+                        </li>
                     </ul>
                 </nav>
             </div>

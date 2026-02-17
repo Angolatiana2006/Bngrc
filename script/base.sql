@@ -131,3 +131,19 @@ INSERT INTO prix_unitaires (besoin_type_id, prix_unitaire) VALUES
 (4, 15000),  -- Bois
 (5, 1),      -- Fonds urgents (1 Ar = 1 Ar)
 (6, 10000);  -- Équipement scolaire
+
+
+
+CREATE TABLE IF NOT EXISTS ventes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    don_id INT NOT NULL,
+    besoin_type_id INT NOT NULL,
+    quantite DECIMAL(10,2) NOT NULL,
+    prix_achat_unitaire DECIMAL(10,2) NOT NULL,
+    prix_vente_unitaire DECIMAL(10,2) NOT NULL,
+    montant_total_vente DECIMAL(10,2) NOT NULL,
+    date_vente DATETIME DEFAULT CURRENT_TIMESTAMP,
+    pourcentage_remise DECIMAL(5,2) DEFAULT 10.00,
+    FOREIGN KEY (don_id) REFERENCES dons(id) ON DELETE CASCADE,
+    FOREIGN KEY (besoin_type_id) REFERENCES besoins_types(id) ON DELETE CASCADE
+);
