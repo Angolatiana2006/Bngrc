@@ -60,19 +60,19 @@ class Achat
     {
         $db = Db::getInstance();
 
-        // Vérifier que le don utilisé est bien de l'argent
+        
         $don = Don::getById($data['don_id']);
         if (!$don) {
             throw new \Exception("Don non trouvé");
         }
 
-        // Vérifier que le don est de type argent
+        
         $besoinType = BesoinType::getById($don['besoin_type_id']);
         if ($besoinType['type'] !== 'argent') {
             throw new \Exception("Seuls les dons en argent peuvent être utilisés pour acheter");
         }
 
-        // Vérifier le montant disponible du don
+        
         $montantDisponible = Don::getQuantiteDisponible($data['don_id']);
         if ($data['montant_total'] > $montantDisponible) {
             throw new \Exception("Montant insuffisant sur ce don");
@@ -132,7 +132,7 @@ class Achat
     {
         $db = Db::getInstance();
 
-        // Total des besoins en montant
+        
         $besoinsMontant = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(b.quantite * COALESCE(p.prix_unitaire, 0)), 0) AS total_besoins_montant
@@ -141,7 +141,7 @@ class Achat
         );
         $totalBesoins = $besoinsMontant ? (float)$besoinsMontant->getData()['total_besoins_montant'] : 0;
 
-        // Total des besoins satisfaits
+        
         $satisfaitMontant = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(a.quantite * COALESCE(p.prix_unitaire, 0)), 0) AS total_satisfait_montant
@@ -151,7 +151,7 @@ class Achat
         );
         $totalSatisfait = $satisfaitMontant ? (float)$satisfaitMontant->getData()['total_satisfait_montant'] : 0;
 
-        // Dons reçus en argent
+        
         $donsArgent = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(d.quantite), 0) AS total_dons_argent
@@ -161,7 +161,7 @@ class Achat
         );
         $totalDonsArgent = $donsArgent ? (float)$donsArgent->getData()['total_dons_argent'] : 0;
 
-        // Dons argent utilisés pour achats
+        
         $donsArgentUtilises = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(a.montant_total), 0) AS total_argent_utilise
@@ -169,7 +169,7 @@ class Achat
         );
         $totalArgentUtilise = $donsArgentUtilises ? (float)$donsArgentUtilises->getData()['total_argent_utilise'] : 0;
 
-        // Dons en nature reçus (valeur)
+        
         $donsNature = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(d.quantite * COALESCE(p.prix_unitaire, 0)), 0) AS total_dons_nature_valeur
@@ -180,7 +180,7 @@ class Achat
         );
         $totalDonsNatureValeur = $donsNature ? (float)$donsNature->getData()['total_dons_nature_valeur'] : 0;
 
-        // Dons nature dispatchés (valeur)
+        
         $donsNatureUtilises = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(at.quantite * COALESCE(p.prix_unitaire, 0)), 0) AS total_nature_utilise
