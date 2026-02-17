@@ -12,7 +12,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
         <div class="main-content-inner">
 
-            <!-- AFFICHAGE DES ERREURS -->
+            
             <?php if (!empty($errors)): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>Erreur(s) :</strong>
@@ -27,8 +27,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 </div>
             <?php endif; ?>
 
-            <!-- FORMULAIRE D'AJOUT DE BESOIN -->
-            <!-- FORMULAIRE D'AJOUT DE BESOIN -->
+           
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title">Nouveau besoin</h4>
