@@ -77,18 +77,14 @@ class BesoinType
         $db->exec("DELETE FROM besoins_types");
     }
 
-    /**
-     * Recherche un type de besoin par son nom et sa catégorie
-     * @param string $name Le nom du besoin (riz, sucre, etc.)
-     * @param string|int $type La catégorie (nature, materiaux, argent, autres) ou l'ID du type
-     */
+
     public static function getByNameAndType(string $name, $type): ?array
     {
         $db = Db::getInstance();
         
-        // Déterminer la valeur du type
+       
         if (is_numeric($type)) {
-            // Si c'est un ID, récupérer le type correspondant
+            
             $typeRow = $db->fetchRow(
                 "SELECT type FROM besoins_types WHERE id = ?",
                 [$type]
@@ -100,11 +96,11 @@ class BesoinType
             
             $typeValue = $typeRow->getData()['type'];
         } else {
-            // Si c'est déjà une chaîne (nature, materiaux, etc.)
+            
             $typeValue = $type;
         }
         
-        // Chercher si un besoin avec ce nom et ce type existe déjà
+        
         $row = $db->fetchRow(
             "SELECT * FROM besoins_types WHERE name = ? AND type = ?",
             [$name, $typeValue]
@@ -113,9 +109,7 @@ class BesoinType
         return $row ? $row->getData() : null;
     }
 
-    /**
-     * Récupère tous les types distincts (nature, materiaux, argent, autres)
-     */
+    
     public static function getDistinctTypes(): array
     {
         $db = Db::getInstance();
