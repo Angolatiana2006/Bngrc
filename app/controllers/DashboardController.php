@@ -12,34 +12,30 @@ use app\models\Achat;
 
 class DashboardController
 {
-    /**
-     * Affiche le tableau de bord principal avec les statistiques globales
-     */
+    
     public function index()
 {
-    // Récupérer les besoins par ville avec les montants
+    
     $besoinsParVille = $this->getBesoinsAvecMontants();
     
-    // Récupérer les montants d'achat par ville
+   
     $achatsParVille = $this->getAchatsParVille();
     
-    // Récupérer les dons récents
+    
     $donsRecents = Dashboard::getDonsRecents(10);
     
-    // Calculer les statistiques financières globales
+    
     $statsFinancieres = $this->getStatsFinancieres();
     
     Flight::render('dashboard/index', [
         'besoinsParVille' => $besoinsParVille,
-        'achatsParVille' => $achatsParVille,  // Bien passer cette variable
+        'achatsParVille' => $achatsParVille,  
         'donsRecents' => $donsRecents,
         'stats' => $statsFinancieres
     ]);
 }
 
-    /**
-     * Récupère les besoins avec leurs montants (basés sur les prix unitaires)
-     */
+    
     private function getBesoinsAvecMontants()
     {
         $db = \app\config\Db::getInstance();
@@ -73,9 +69,7 @@ class DashboardController
         return array_map(fn($row) => $row->getData(), $rows);
     }
 
-   /**
- * Récupère les montants d'achat par ville (basé sur la ville_id dans achats)
- */
+   
 private function getAchatsParVille()
 {
     $db = \app\config\Db::getInstance();
@@ -96,14 +90,12 @@ private function getAchatsParVille()
     return array_map(fn($row) => $row->getData(), $rows);
 }
 
-    /**
-     * Calcule les statistiques financières globales
-     */
+    
     private function getStatsFinancieres()
     {
         $db = \app\config\Db::getInstance();
 
-        // Total des besoins en montant
+        
         $besoins = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(b.quantite * COALESCE(p.prix_unitaire, 0)), 0) AS total_besoins
@@ -112,7 +104,7 @@ private function getAchatsParVille()
         );
         $totalBesoins = $besoins ? (float)$besoins->getData()['total_besoins'] : 0;
 
-        // Total satisfait par dons physiques
+        
         $satisfaitDons = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(at.quantite * COALESCE(p.prix_unitaire, 0)), 0) AS total_satisfait_dons
@@ -122,16 +114,16 @@ private function getAchatsParVille()
         );
         $totalSatisfaitDons = $satisfaitDons ? (float)$satisfaitDons->getData()['total_satisfait_dons'] : 0;
 
-        // Total des achats effectués
+        
         $achats = $db->fetchRow(
             "SELECT COALESCE(SUM(montant_total), 0) AS total_achats FROM achats"
         );
         $totalAchats = $achats ? (float)$achats->getData()['total_achats'] : 0;
 
-        // Total satisfait (dons physiques + achats)
+        
         $totalSatisfait = $totalSatisfaitDons + $totalAchats;
 
-        // Dons en argent reçus
+        
         $donsArgent = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(d.quantite), 0) AS total_dons_argent
@@ -141,13 +133,13 @@ private function getAchatsParVille()
         );
         $totalDonsArgent = $donsArgent ? (float)$donsArgent->getData()['total_dons_argent'] : 0;
 
-        // Dons en argent utilisés (achats)
+        
         $argentUtilise = $db->fetchRow(
             "SELECT COALESCE(SUM(montant_total), 0) AS total_argent_utilise FROM achats"
         );
         $totalArgentUtilise = $argentUtilise ? (float)$argentUtilise->getData()['total_argent_utilise'] : 0;
 
-        // Dons en nature reçus (valeur)
+        
         $donsNature = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(d.quantite * COALESCE(p.prix_unitaire, 0)), 0) AS total_dons_nature
@@ -158,7 +150,7 @@ private function getAchatsParVille()
         );
         $totalDonsNature = $donsNature ? (float)$donsNature->getData()['total_dons_nature'] : 0;
 
-        // Dons en nature dispatchés (valeur)
+        
         $natureUtilisee = $db->fetchRow(
             "SELECT 
                 COALESCE(SUM(at.quantite * COALESCE(p.prix_unitaire, 0)), 0) AS total_nature_utilisee
@@ -183,5 +175,5 @@ private function getAchatsParVille()
         ];
     }
 
-    // ... autres méthodes (ville, exportPdf, etc.)
+    
 }
