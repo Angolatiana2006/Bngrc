@@ -9,14 +9,14 @@ $breadcrumbs = [
 ];
 require_once __DIR__ . '/../layouts/header.php';
 
-// Calculer le total des dons en argent disponibles
+
 $totalArgentDisponible = 0;
 foreach($donsArgent as $don) {
     $totalArgentDisponible += $don['quantite_disponible'];
 }
 ?>
 
-<!-- AFFICHAGE DES ERREURS -->
+
 <?php if(isset($_GET['error']) && $_GET['error'] == 1): ?>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <strong>Erreur(s) :</strong>
@@ -35,7 +35,7 @@ foreach($donsArgent as $don) {
     </div>
 <?php endif; ?>
 
-<!-- MESSAGE DE SUCCÈS -->
+
 <?php if(isset($_GET['success']) && $_GET['success'] == 1): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>Succès !</strong> L'achat a été effectué avec succès. Le stock a été mis à jour.
@@ -45,14 +45,14 @@ foreach($donsArgent as $don) {
     </div>
 <?php endif; ?>
 
-<!-- PORTE MONNAIE (TOTAL DONS ARGENT) -->
+
 <div class="row mb-4">
     <div class="col-md-12">
         <div class="card bg-success text-white">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title text-white">💰 Porte-monnaie BNGRC</h5>
+                        <h5 class="card-title text-white"> Porte-monnaie BNGRC</h5>
                         <p class="card-text h2"><?= number_format($totalArgentDisponible, 2) ?> AR</p>
                     </div>
                     <div>
@@ -65,7 +65,7 @@ foreach($donsArgent as $don) {
     </div>
 </div>
 
-<!-- FORMULAIRE D'ACHAT -->
+
 <div class="card">
     <div class="card-body">
         <h4 class="header-title">Acheter des articles pour réapprovisionner le stock</h4>
@@ -77,7 +77,7 @@ foreach($donsArgent as $don) {
         
         <form method="POST" action="/achats/create" class="mt-4" id="achatForm">
             
-            <!-- Article à acheter -->
+            
             <div class="form-group">
                 <label for="besoin_type_id">Article à acheter <span class="text-danger">*</span></label>
                 <select class="form-control" id="besoin_type_id" name="besoin_type_id" required>
@@ -94,15 +94,13 @@ foreach($donsArgent as $don) {
                 </select>
             </div>
 
-            <!-- Quantité -->
+            
             <div class="form-group">
                 <label for="quantite">Quantité à acheter <span class="text-danger">*</span></label>
                 <input type="number" step="0.01" min="0.01" class="form-control" id="quantite" name="quantite" required>
             </div>
 
-            <!-- Dans le formulaire, après le champ quantité, ajoutez : -->
-
-            <!-- Ville destinataire -->
+            
             <div class="form-group">
                 <label for="ville_id">Ces achats sont destinés à quelle ville ? <span class="text-danger">*</span></label>
                 <select class="form-control" id="ville_id" name="ville_id" required>
@@ -116,7 +114,7 @@ foreach($donsArgent as $don) {
                 <small class="text-muted">La ville qui recevra ces articles</small>
             </div>
 
-            <!-- Prix unitaire (affiché automatiquement) -->
+            
             <div class="form-group">
                 <label>Prix unitaire</label>
                 <div class="input-group">
@@ -133,7 +131,7 @@ foreach($donsArgent as $don) {
                 </div>
             </div>
 
-            <!-- Total à payer -->
+            
             <div class="form-group">
                 <label>Total à payer</label>
                 <div class="input-group">
@@ -150,12 +148,12 @@ foreach($donsArgent as $don) {
                 </div>
             </div>
 
-            <!-- Champs cachés pour la soumission -->
+            
             <input type="hidden" name="montant_total" id="montant_total" value="0">
             <input type="hidden" name="prix_unitaire" id="prix_unitaire_hidden" value="0">
             <input type="hidden" name="don_id" value="auto">
 
-            <!-- Bouton de confirmation -->
+            
             <div class="form-group mt-4">
                 <button type="submit" class="btn btn-primary btn-lg" id="btnConfirmer" disabled>
                     <i class="fa fa-shopping-cart"></i> Confirmer l'achat
@@ -170,7 +168,7 @@ foreach($donsArgent as $don) {
 </div>
 
 
-<!-- DÉBOGAGE ULTIME -->
+
 <?php
 echo "<!-- DEBUG: totalArgentDisponible brut = " . $totalArgentDisponible . " -->";
 echo "<!-- DEBUG: totalArgentDisponible type = " . gettype($totalArgentDisponible) . " -->";
@@ -186,7 +184,7 @@ console.log("floatval: <?= floatval($totalArgentDisponible) ?>");
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Méthode ultra-simple : laisser PHP faire le calcul
+    
     const totalArgent = <?= floatval($totalArgentDisponible) ?>;
     console.log("Total Argent (depuis floatval):", totalArgent);
     
@@ -215,18 +213,18 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Récupérer les valeurs
+        
         const prix = parseFloat(selectedOption.dataset.prix) || 0;
         const nom = selectedOption.dataset.nom || 'Article';
         const quantite = parseFloat(quantiteInput.value) || 0;
         
-        // Calculer
+        
         const total = quantite * prix;
         
         console.log("Prix:", prix, "Quantité:", quantite, "Total:", total);
         console.log("Comparaison:", total, ">", totalArgent, "?", total > totalArgent);
         
-        // Afficher
+        
         prixUnitaireAffiche.value = prix.toFixed(2) + ' AR';
         articleNomAffiche.textContent = nom;
         prixUnitaireHidden.value = prix;
@@ -235,15 +233,15 @@ document.addEventListener('DOMContentLoaded', function() {
             totalPayerAffiche.value = total.toFixed(2) + ' AR';
             montantTotalHidden.value = total;
             
-            // Vérification
+            
             if (total > totalArgent) {
                 totalPayerAffiche.style.color = 'red';
-                verificationSolde.innerHTML = '❌ Solde insuffisant';
+                verificationSolde.innerHTML = ' Solde insuffisant';
                 verificationSolde.className = 'input-group-text bg-danger text-white';
                 btnConfirmer.disabled = true;
             } else {
                 totalPayerAffiche.style.color = 'green';
-                verificationSolde.innerHTML = '✅ Solde suffisant';
+                verificationSolde.innerHTML = ' Solde suffisant';
                 verificationSolde.className = 'input-group-text bg-warning';
                 btnConfirmer.disabled = false;
             }
