@@ -12,9 +12,7 @@ use app\models\PrixUnitaire;
 
 class AchatController
 {
-    /**
-     * Affiche la liste des achats
-     */
+    
     public function index()
     {
         $achats = Achat::getAllWithDetails();
@@ -26,29 +24,27 @@ class AchatController
         ]);
     }
 
-    /**
-     * Affiche le formulaire d'achat
-     */
+    
     public function showCreateForm()
     {
-        // Démarrer la session
+        
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Récupérer les dons en argent disponibles
+        
         $donsDisponibles = Don::getDisponibles();
         $donsArgent = array_filter($donsDisponibles, function($don) {
             return $don['type'] === 'argent';
         });
         
-        // Récupérer les types de besoins qui ont des prix unitaires
+        
         $prixUnitaires = PrixUnitaire::getAllWithDetails();
         
-        // Récupérer les villes
+        
         $villes = Ville::getAll();
         
-        // Récupérer les besoins non satisfaits (optionnel)
+        
         $besoins = [];
         $db = \app\config\Db::getInstance();
         $rows = $db->fetchAll(
@@ -71,17 +67,15 @@ class AchatController
         ]);
     }
 
-    /**
-     * Traite la création d'un achat
-     */
+    
     public function create()
     {
-        // Démarrer la session
+        
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Récupérer les données
+        
         $besoin_type_id = $_POST['besoin_type_id'] ?? null;
         $quantite = $_POST['quantite'] ?? null;
         $montant_total = $_POST['montant_total'] ?? 0;
@@ -102,19 +96,19 @@ class AchatController
             $errors[] = "Veuillez sélectionner la ville destinataire";
         }
 
-        // Récupérer tous les dons en argent disponibles
+        
         $donsDisponibles = Don::getDisponibles();
         $donsArgent = array_filter($donsDisponibles, function($don) {
             return $don['type'] === 'argent';
         });
 
-        // Calculer le total disponible
+        
         $totalDisponible = 0;
         foreach($donsArgent as $don) {
             $totalDisponible += $don['quantite_disponible'];
         }
 
-        // Vérifier si on a assez d'argent
+        
         if ($montant_total > $totalDisponible) {
             $errors[] = "Montant total ($montant_total Ar) dépasse le total disponible ($totalDisponible Ar)";
         }
@@ -126,7 +120,7 @@ class AchatController
         }
 
         try {
-            // Répartir l'achat sur plusieurs dons si nécessaire
+            
             $montantRestant = $montant_total;
             
             foreach($donsArgent as $don) {
@@ -135,7 +129,7 @@ class AchatController
                 $montantUtilise = min($don['quantite_disponible'], $montantRestant);
                 $quantiteAchetee = ($montantUtilise / $prix_unitaire);
                 
-                // 1. Enregistrer l'achat avec la ville destinataire
+                
                 $dataAchat = [
                     'don_id' => $don['id'],
                     'besoin_type_id' => $besoin_type_id,
@@ -147,15 +141,15 @@ class AchatController
                 ];
                 Achat::insert($dataAchat);
                 
-                // 2. Créer ou mettre à jour le don en nature correspondant
+                
                 $donNatureExistant = Don::getByBesoinTypeId($besoin_type_id);
                 
                 if ($donNatureExistant) {
-                    // Mettre à jour le don existant (augmenter la quantité)
+                    
                     $nouvelleQuantite = $donNatureExistant['quantite'] + $quantiteAchetee;
                     Don::update($donNatureExistant['id'], ['quantite' => $nouvelleQuantite]);
                 } else {
-                    // Créer un nouveau don en nature
+                    
                     $dataDon = [
                         'besoin_type_id' => $besoin_type_id,
                         'quantite' => $quantiteAchetee
@@ -174,9 +168,7 @@ class AchatController
         }
     }
 
-    /**
-     * Affiche la page de récapitulation (avec AJAX)
-     */
+    
     public function recap()
     {
         $stats = Achat::getStatsGlobales();
@@ -188,9 +180,7 @@ class AchatController
         ]);
     }
 
-    /**
-     * API AJAX pour rafraîchir les stats
-     */
+    
     public function recapAjax()
     {
         $stats = Achat::getStatsGlobales();
@@ -206,9 +196,7 @@ class AchatController
         exit;
     }
 
-    /**
-     * Filtre les achats par ville
-     */
+    
     public function filterByVille($ville_id)
     {
         if ($ville_id == 'all') {
