@@ -67,14 +67,14 @@ class Attribution
     {
         $db = Db::getInstance();
 
-        // Vérifier la quantité disponible du don
+        
         $quantite_disponible = Don::getQuantiteDisponible($data['don_id']);
         
         if ($data['quantite'] > $quantite_disponible) {
             throw new \Exception("Erreur : La quantité donnée ({$data['quantite']}) est supérieure à la quantité disponible du don ({$quantite_disponible})");
         }
 
-        // Vérifier la quantité restante du besoin
+        
         $quantite_restante = Besoin::getQuantiteRestante($data['besoin_id']);
         
         if ($data['quantite'] > $quantite_restante) {
@@ -96,17 +96,17 @@ class Attribution
     {
         $db = Db::getInstance();
 
-        // Récupérer l'attribution actuelle pour ajuster les quantités
+        
         $attribution = self::getById($id);
         
-        // Vérifier la quantité disponible du don (en tenant compte de l'ancienne attribution)
+        
         $quantite_disponible = Don::getQuantiteDisponible($data['don_id']) + $attribution['quantite'];
         
         if ($data['quantite'] > $quantite_disponible) {
             throw new Exception("Erreur : La quantité donnée ({$data['quantite']}) est supérieure à la quantité disponible du don ({$quantite_disponible})");
         }
 
-        // Vérifier la quantité restante du besoin (en tenant compte de l'ancienne attribution)
+        
         $quantite_restante = Besoin::getQuantiteRestante($data['besoin_id']) + $attribution['quantite'];
         
         if ($data['quantite'] > $quantite_restante) {
