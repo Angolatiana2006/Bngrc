@@ -23,7 +23,7 @@
 
 <div class="page-container">
 
-    <!-- SIDEBAR -->
+    
     <div class="sidebar-menu">
         <div class="sidebar-header">
             <div class="logo">
@@ -60,12 +60,12 @@
             </div>
         </div>
     </div>
-    <!-- FIN SIDEBAR -->
+   
 
-    <!-- CONTENU PRINCIPAL -->
+    
     <div class="main-content">
 
-        <!-- HEADER -->
+        
         <div class="header-area">
             <div class="row align-items-center">
                 <div class="col-md-6">
@@ -81,7 +81,7 @@
             </div>
         </div>
 
-        <!-- TITRE -->
+        
         <div class="page-title-area">
             <div class="row align-items-center">
                 <div class="col-sm-6">
