@@ -7,7 +7,7 @@ $breadcrumbs = [
 ];
 require_once __DIR__ . '/../layouts/header.php';
 
-// Calculer le solde actuel des dons en argent
+
 $donsDisponibles = \app\models\Don::getDisponibles();
 $totalArgentRestant = 0;
 foreach($donsDisponibles as $don) {
@@ -17,7 +17,7 @@ foreach($donsDisponibles as $don) {
 }
 ?>
 
-<!-- MESSAGES -->
+
 <?php if(isset($_GET['success']) && $_GET['success'] == 1): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>Succès !</strong> L'achat a été enregistré avec succès.
@@ -27,12 +27,12 @@ foreach($donsDisponibles as $don) {
     </div>
 <?php endif; ?>
 
-<!-- SOLDE ACTUEL -->
+
 <div class="row mb-4">
     <div class="col-md-6">
         <div class="card bg-info text-white">
             <div class="card-body">
-                <h5 class="card-title text-white">💰 Solde actuel du porte-monnaie</h5>
+                <h5 class="card-title text-white"> Solde actuel du porte-monnaie</h5>
                 <p class="card-text h2"><?= number_format($totalArgentRestant, 2) ?> AR</p>
             </div>
         </div>
@@ -47,18 +47,18 @@ foreach($donsDisponibles as $don) {
     </div>
 </div>
 
-<!-- TABLEAU DES ACHATS -->
+
 <div class="card">
     <div class="card-body">
         <h4 class="header-title">Historique des achats</h4>
 
         <div class="table-responsive mt-4">
             <table class="table table-bordered table-hover">
-                <!-- Dans le tableau, ajoutez une colonne pour la ville -->
+                
                 <thead class="thead-light">
                     <tr>
                         <th>Date</th>
-                        <th>Ville destinataire</th>  <!-- Nouvelle colonne -->
+                        <th>Ville destinataire</th>  
                         <th>Article acheté</th>
                         <th>Quantité</th>
                         <th>Prix unitaire</th>
