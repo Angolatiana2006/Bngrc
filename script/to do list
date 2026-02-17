@@ -1,0 +1,173 @@
+
+SUJET: gerer besoins sinistres par villes,dons recus,distribution des dons par villes
+Affichage: liste des villes avec leur besoins,quantites demandees,quantites donnees,ce qui reste a couvrir
+
+
+etape 1:
+comprehension du sujet
+creation bases de donnée
+
+plans du projet
+Laureen                         
+Activités:                      estimation:
+Page besoins                            2H
+
+
+Tahiry                           estimation:
+Activités                              1h30
+Pages dons                      
+
+Angolatiana                      estimation:
+Activités                              1h30
+Pages attributions dons
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-generale:
+    -creation base de donnee taximoto (OK)
+    -creation des tables(moto,conducteur,affectation,course) (OK)
+    -insertion de donnees de test (OK)
+    -connexion Base de donnee: mysql/PDO (OK)
+    -organisation du projet MVC (OK)
+
+//Gestion des courses:creation,modif,validation   Angola
+Base: table course(id course,date,heure,debut)
+donnee: insertion course
+        modification course
+        validation course
+Design: 
+        Vues:
+             liste des courses avec valider ou non (OK)
+             formulaire de creation de course (champ:nom Conducteur,matricule moto,date,heure debut,heure fin,montant paye,lieu depart,lieu arrivee) + bouton sauver (OK)
+             formulaire modification (champ:nom Conducteur,matricule moto,date,heure debut,heure fin,montant paye,lieu depart,lieu arrivee) + bouton sauver  (OK)
+        
+fonction: Models: 
+             Affectation:getByConducteurAndDate(),getAll()  (OK)
+             Conducteur:getById(),getAll(),getPourcentagesByDate  (OK)
+             Course:getById(),getAll(),update(),validate  (OK)
+             Moto:getById(),getAll(),getPourcentagesByDate  (OK)
+             
+integration phpflight: 
+        controller: si course valide =1, pas de modif  (OK)
+        Routes: routes creation de course: POST,recup,valider,insert,redirect (OK)
+                route modification course: POST,verification si deja valide, modif si accepter  (OK)
+                route validation course: GET,Update course modif colonne valide=1,redirection (OK)
+
+//creation de donnees necessaires table
+
+//3
+3-Creation des pages (Laureen)
+
+    .Creation des dossires app/view
+    -ajouter des pages php {
+        ajout_course
+        report_list
+    }
+
+    .pages
+    -report_list{
+       creation de 2 tableaux
+       creation des requetes sql 
+       1tab -> affichage des montants total( recette, benefice, depense);
+       2tab -> affichage en mode list par date du 1tab
+    }
+    .filtre 
+    -ajouter une partie filtre 
+     .ajout champ date_debut 
+     .ajout champ date_fin
+     .bouton filtre 
+     .bouton retour 
+
+    .report_php 
+     condition sui permet de d'afficher seulement les montant selon la date donne
+
+    .reportcontrollers 
+    recup a partir de $_GET les valeurs des dates envoyes par le formulaire 
+    condition verifie si la variable existe vraiment 
+
+
+//Partie 2
+
+4-changer prix carburant    (Angola)
+Base: table carburant(id,prix par litre)   (OK)
+donnee: insertion nouveau prix
+        mise a jour prix            (OK)
+        
+Design: 
+        Vues:
+             formulaire modif prix carburant:prix actuel,nouveau prix par litre valider  (OK)
+             
+        
+fonction: Models: 
+             carburant:getPrixActif(),setPrix()  (OK)
+             
+integration phpflight: 
+        controller: un seul prix autorise
+        Routes: routes edit-carb: GET, recup prix actuel,formulaire de modif   (OK)
+                route update: POST,recup nouveau prix,inserer,redirection  (OK)
+                
+
+5-Menu pour effacer toutes les courses avec code confirmation
+Base: table course (OK)
+
+        
+Design: 
+        Vues:
+             delette-all: message de confirmation  (OK)
+             champ ajout code confirmation  (OK)
+             bouton supp  (OK)
+             
+        
+fonction: Models: 
+             Course: delette-all: supp courses tables  (OK)
+             
+integration phpflight: 
+        controller: affiche vue formulaire code ,verif code (OK)
+        Routes: routes delette: GET   (OK)
+                route delette: POST    (OK)
+                
