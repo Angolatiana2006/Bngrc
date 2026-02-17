@@ -10,7 +10,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
         <div class="main-content-inner">
 
-            <!-- MESSAGES -->
+            
             <?php if(isset($_GET['success']) && $_GET['success'] == 1): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong>Succès !</strong> Le don a été attribué avec succès.
@@ -47,7 +47,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 </div>
             <?php endif; ?>
 
-            <!-- APERÇU DES STOCKS -->
+            
             <div class="row mb-4">
                 <div class="col-md-12">
                     <div class="card">
@@ -94,7 +94,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 </div>
             </div>
 
-            <!-- TABLEAU DES BESOINS AVEC BOUTONS D'ATTRIBUTION -->
+            
             <div class="card mb-4">
                 <div class="card-body">
                     <h4 class="header-title">Besoins par ville</h4>
@@ -154,7 +154,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 </div>
             </div>
 
-            <!-- HISTORIQUE DES ATTRIBUTIONS -->
+            
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title">Historique des attributions</h4>
