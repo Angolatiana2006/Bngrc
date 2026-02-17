@@ -10,7 +10,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <div class="main-content-inner">
 
-    <!-- MESSAGES DE SUCCÈS -->
+    
     <?php if(isset($_GET['success']) && $_GET['success'] == 1): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>Succès !</strong> Le don a été ajouté avec succès.
@@ -20,7 +20,7 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
     <?php endif; ?>
     
-    <!-- BOUTON D'AJOUT -->
+    
     <div class="row mb-4">
         <div class="col-12">
             <a href="/dons/create" class="btn btn-primary">
@@ -32,7 +32,7 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 
-    <!-- TABLEAU DES DONS -->
+    
     <div class="card">
         <div class="card-body">
             <h4 class="header-title">Stock BNGRC - Tous les dons</h4>
@@ -56,16 +56,16 @@ require_once __DIR__ . '/../layouts/header.php';
                         <?php if(!empty($dons)): ?>
                             <?php foreach($dons as $don): ?>
                                 <?php 
-                                    // Calculer le disponible en tenant compte des attributions ET des achats
+                                    
                                     $quantite_attribuee = $don['quantite_attribuee'] ?? 0;
                                     $montant_achats = $don['montant_utilise_achats'] ?? 0;
                                     
-                                    // Pour les dons en argent, le disponible est en montant
+                                    
                                     if ($don['type'] === 'argent') {
                                         $disponible = $don['quantite'] - $montant_achats;
                                         $unite = 'AR';
                                     } else {
-                                        // Pour les dons en nature, le disponible est en quantité
+                                        
                                         $disponible = $don['quantite'] - $quantite_attribuee;
                                         $unite = '';
                                     }
